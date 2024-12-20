@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Axios } from "../../global";
-import { Button, Space, Table, Tag } from "antd";
-import { FaEye, FaHeart } from "react-icons/fa";
+import { Button, message, Space, Table, Tag } from "antd";
+import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import ProductDetailsModal from "../Modals/ProductDetailsModal";
+import { PRODUCT_CATEGORY } from "../../constant";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addFavoriteAction,
+  deleteFavoriteAction,
+} from "../../store/slice/allFavoriteSlice";
 
 export default function ProductsComponent() {
+  const favoriteList = useSelector(
+    (state) => state.favoriteListSlice.favoriteList
+  );
+  const dispatch = useDispatch();
   const [productsData, setProductsData] = useState([]);
   const [singleProductData, setSingleProductData] = useState(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isAllProductsLoading, setIsAllProductsLoading] = useState(false);
-
-  // Category
-  const productCategory = [
-    {
-      category: "electronics",
-      color: "purple",
-    },
-    {
-      category: "jewelery",
-      color: "magenta",
-    },
-    {
-      category: "men's clothing",
-      color: "orange",
-    },
-    {
-      category: "women's clothing",
-      color: "geekblue",
-    },
-  ];
+  const [isLoading, setIsLoading] = useState(false);
 
   // Table columns
   const columns = [
@@ -65,19 +55,19 @@ export default function ProductsComponent() {
       title: "Category",
       key: "category",
       dataIndex: "category",
-      filters: productCategory.map((cat) => ({
+      filters: PRODUCT_CATEGORY.map((cat) => ({
         text: cat.category,
         value: cat.category,
       })),
       onFilter: (value, record) => record.category.startsWith(value),
       filterSearch: true,
       render: (category) => {
-        const color = productCategory.find(
+        const color = PRODUCT_CATEGORY.find(
           (item) => item.category === category
         )?.color;
         return (
           <Tag color={color} key={category}>
-            {category.toUpperCase()}
+            {category?.toUpperCase()}
           </Tag>
         );
       },
@@ -97,11 +87,34 @@ export default function ProductsComponent() {
               />
             }
           />
-          <Button type="text" icon={<FaHeart size={20} color="#D10000" />} />
+          <Button
+            type="text"
+            icon={
+              favoriteList?.some((f) => f.id === record?.id) ? (
+                <FaHeart size={20} color="red" />
+              ) : (
+                <FaRegHeart size={20} color="red" />
+              )
+            }
+            onClick={handleFavorite.bind(null, record?.id)}
+          />
         </Space>
       ),
     },
   ];
+
+  // Handle add & remove the product
+  const handleFavorite = (id) => {
+    const alreadyFavorite = favoriteList?.find((f) => f.id === id);
+    const selectedFavorite = productsData?.find((d) => d.id === id);
+    if (alreadyFavorite) {
+      dispatch(deleteFavoriteAction(id));
+      message.success("Product removed from favorite successfully!");
+    } else {
+      dispatch(addFavoriteAction(selectedFavorite));
+      message.success("Product added in favorite successfully!");
+    }
+  };
 
   // /Handle view product details
   const handleViewProduct = async (id) => {
