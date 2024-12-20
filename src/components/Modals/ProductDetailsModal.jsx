@@ -1,7 +1,21 @@
-import { Button, Card, Image, Modal, Skeleton, Space, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Image,
+  message,
+  Modal,
+  Skeleton,
+  Space,
+  Tag,
+} from "antd";
 import { MdStarRate } from "react-icons/md";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addFavoriteAction,
+  deleteFavoriteAction,
+} from "../../store/slice/allFavoriteSlice";
 
 export default function ProductDetailsModal({
   isLoading,
@@ -9,11 +23,35 @@ export default function ProductDetailsModal({
   handleCancel,
   ProductDetails,
 }) {
+  const favoriteList = useSelector(
+    (state) => state.favoriteListSlice.favoriteList
+  );
+  const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [data, setData] = useState(null);
 
-  const handleAddToFavorite = () => {
-    setIsFavorite((prev) => !prev);
+  // Handle add & remove the product
+  const handleFavorite = (data) => {
+    const selectedProduct = favoriteList?.some((f) => f.id === data?.id);
+    if (selectedProduct) {
+      dispatch(deleteFavoriteAction(data?.id));
+      setIsFavorite(false);
+      message.success("Product removed from favorite successfully!");
+    } else {
+      dispatch(addFavoriteAction(data));
+      setIsFavorite(true);
+      message.success("Product added in favorite successfully!");
+    }
   };
+
+  // Update the data
+  useEffect(() => {
+    if (ProductDetails) {
+      const isAdded = favoriteList?.some((f) => f.id === ProductDetails.id);
+      setData(ProductDetails);
+      setIsFavorite(isAdded);
+    }
+  }, [ProductDetails]);
   return (
     <Modal
       title="Product Details"
@@ -31,60 +69,53 @@ export default function ProductDetailsModal({
           title={
             <div className="flex justify-between">
               <Tag color="blue" className="text-base capitalize">
-                {ProductDetails?.category}
+                {data?.category}
               </Tag>
               <Button
                 icon={
                   !isFavorite ? (
-                    <FaRegHeart size={20} />
+                    <FaRegHeart size={20} color="red" />
                   ) : (
                     <FaHeart color="red" size={20} />
                   )
                 }
                 type="text"
-                onClick={handleAddToFavorite}
+                onClick={handleFavorite.bind(null, data)}
               />
             </div>
           }
           size="small"
           cover={
-            ProductDetails?.image ? (
-              <div
-                className="justify-center items-center"
-                style={{ display: "flex" }}
-              >
+            <div
+              className="justify-center pt-2  overflow-hidden"
+              style={{ display: "flex", width: "100%", height: "300px" }}
+            >
+              {data?.image ? (
                 <Image
                   width={180}
-                  alt={ProductDetails?.title}
-                  src={ProductDetails?.image}
+                  alt={data?.title}
+                  src={data?.image}
+                  className="object-contain"
                 />
-              </div>
-            ) : (
-              <Skeleton.Image
-                active={true}
-                style={{ width: 300, height: 160 }}
-              />
-            )
+              ) : (
+                <Skeleton.Image
+                  active={true}
+                  style={{ width: 300, height: 300 }}
+                />
+              )}
+            </div>
           }
         >
           <Space direction="vertical" className="gap-2">
-            <h3 className="text-lg font-semibold break-words">
-              {ProductDetails?.title}
-            </h3>
-            <p className="text-base break-words">
-              {ProductDetails?.description}
-            </p>
-            <p className="break-words text-lg font-medium">
-              ₹{ProductDetails?.price}
-            </p>
-            {ProductDetails?.rating && (
+            <h3 className="text-lg font-semibold break-words">{data?.title}</h3>
+            <p className="text-base break-words">{data?.description}</p>
+            <p className="break-words text-lg font-medium">₹{data?.price}</p>
+            {data?.rating && (
               <Space>
                 <p className="font-bold flex items-center gap-3 text-lg">
-                  {ProductDetails?.rating?.rate}
-                  {ProductDetails?.rating?.count && (
-                    <span className="font-normal">
-                      ({ProductDetails.rating.count})
-                    </span>
+                  {data?.rating?.rate}
+                  {data?.rating?.count && (
+                    <span className="font-normal">({data.rating.count})</span>
                   )}
                   <MdStarRate size={20} className="text-yellow-400" />
                 </p>
