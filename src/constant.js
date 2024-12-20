@@ -18,3 +18,22 @@ export const MENU_ITEMS = [
     label: <Link to="/favorites">Favorites</Link>,
   },
 ];
+
+export const PRODUCT_CATEGORY = [
+  {
+    category: "electronics",
+    color: "purple",
+  },
+  {
+    category: "jewelery",
+    color: "magenta",
+  },
+  {
+    category: "men's clothing",
+    color: "orange",
+  },
+  {
+    category: "women's clothing",
+    color: "geekblue",
+  },
+];
