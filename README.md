@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Product Analytics Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Objective
 
-## Available Scripts
+The goal of this project is to create a simple Product Analytics Dashboard that displays a list of products, allows filtering, and shows basic analytics like the total number of products and average price.
 
-In the project directory, you can run:
+## Tech Stack
 
-### `npm start`
+- **React**: For building the user interface and components.
+- **Redux Toolkit**: For managing global state.
+- **Ant Design**: For UI components like tables, buttons, and modals.
+- **Axios**: For making HTTP requests to the Fake Store API.
+- **Recharts**: For displaying charts (pie) for product analytics.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Data Source
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Fake Store API**: This API provides product data that can be fetched via the `/products` endpoint.
+  - API Endpoint: `https://fakestoreapi.com/products`
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Product List Page
 
-### `npm run build`
+- **Product Listing**: Fetch and display a list of products from the Fake Store API.
+- **Columns**:
+  - Product Name
+  - Category
+  - Price
+  - Rating
+  - Actions (View Details, Add to Favorites)
+- **Search and Filter**:
+  - Search by product name or category.
+  - Sort products by price.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Product Details Modal
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Modal View**: When a product is clicked, show a modal with more product details, including:
+  - Product Description
+  - Product Image
+  - Rating
+  - Product Category
+- **Add to Favorites**: Users can add products to their favorites from the modal.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Favorites Feature
 
-### `npm run eject`
+- **Mark as Favorite**: Users can mark products as favorites.
+- **Favorites List**: View a list of favorite products in a separate section.
+- **Local Storage**: The favorites list is persisted in local storage to retain it across sessions.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Analytics Section
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Product Analytics**:
+  - Total number of products.
+  - Average product price.
+- **Chart**: Display a small pie chart showing the distribution of products across categories. This will use **Recharts**.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Error Handling
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **API Error Handling**: Display a user-friendly error message if the API request fails.
 
-## Learn More
+### Bonus (Optional)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Sorting**: Add the ability to sort products by price (low to high, high to low).
+- **Responsive Design**: Make the app responsive for mobile and tablet views.
