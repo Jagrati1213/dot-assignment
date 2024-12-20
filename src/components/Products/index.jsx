@@ -5,7 +5,6 @@ import { FaEye, FaHeart } from "react-icons/fa";
 import ProductDetailsModal from "../Modals/ProductDetailsModal";
 
 export default function ProductsComponent() {
-  const [originalProductsData, setOriginalProductsData] = useState([]);
   const [productsData, setProductsData] = useState([]);
   const [singleProductData, setSingleProductData] = useState(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -38,6 +37,12 @@ export default function ProductsComponent() {
       title: "Product Name",
       dataIndex: "title",
       key: "title",
+      filters: productsData.map((data) => ({
+        text: data.title,
+        value: data.title,
+      })),
+      onFilter: (value, record) => record.title.startsWith(value),
+      filterSearch: true,
       render: (text) => {
         const updatedText = text.length > 20 ? `${text.slice(0, 20)}...` : text;
         return <p>{updatedText}</p>;
@@ -47,6 +52,7 @@ export default function ProductsComponent() {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      sorter: (a, b) => a.price - b.price,
       render: (price) => `₹${price}`,
     },
     {
@@ -59,6 +65,12 @@ export default function ProductsComponent() {
       title: "Category",
       key: "category",
       dataIndex: "category",
+      filters: productCategory.map((cat) => ({
+        text: cat.category,
+        value: cat.category,
+      })),
+      onFilter: (value, record) => record.category.startsWith(value),
+      filterSearch: true,
       render: (category) => {
         const color = productCategory.find(
           (item) => item.category === category
@@ -97,8 +109,7 @@ export default function ProductsComponent() {
     setIsLoading(true);
     try {
       const response = await Axios.get(`products/${id}`);
-      const data = await response.data;
-      setSingleProductData(data);
+      setSingleProductData(response.data);
     } catch (error) {
       console.log("Error in single product details", error?.message);
     } finally {
@@ -117,9 +128,7 @@ export default function ProductsComponent() {
     setIsAllProductsLoading(true);
     try {
       const response = await Axios.get("products");
-      const result = response.data;
-      setOriginalProductsData(result);
-      setProductsData(result);
+      setProductsData(response.data);
     } catch (error) {
       console.log("Error in fetching all products", error?.message);
     } finally {
