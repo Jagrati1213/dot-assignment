@@ -1,4 +1,4 @@
-import { Space } from "antd";
+import { Skeleton, Space } from "antd";
 import { Axios } from "../../global";
 import React, { useEffect, useState, useMemo } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
@@ -55,36 +55,46 @@ export default function HomeComponent() {
         </p>
         <p className="text-lg">
           <strong>Average Price : </strong>
-          {averagePrice ? `₹${averagePrice}` : 0}
+          {!isNaN(averagePrice) ? `₹${averagePrice}` : 0}
         </p>
       </Space>
 
       {/* Pie Chart */}
+
       <div className="p-5 border mt-10">
         <h3 className="text-lg font-semibold mb-10">Category Distribution</h3>
         <div className="w-full" style={{ height: "300px" }}>
-          <ResponsiveContainer>
-            <PieChart width={730} height={250}>
-              <Pie
-                data={categoryDistribution}
-                dataKey="count"
-                nameKey="category"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                fill="#8884d8"
-                label={(entry) => `${entry.category} (${entry.count})`}
-              >
-                {categoryDistribution.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          {!categoryDistribution.length ? (
+            <div className="flex justify-center">
+              <Skeleton.Node
+                active
+                style={{ width: 200, height: 200, borderRadius: "50%" }}
+              />
+            </div>
+          ) : (
+            <ResponsiveContainer>
+              <PieChart width={730} height={250}>
+                <Pie
+                  data={categoryDistribution}
+                  dataKey="count"
+                  nameKey="category"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={120}
+                  fill="#8884d8"
+                  label={(entry) => `${entry.category} (${entry.count})`}
+                >
+                  {categoryDistribution.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
     </div>
