@@ -1,0 +1,48 @@
+:root {
+  --textColor: #d8c4b6;
+  --bgDarkColor: #001529;
+  --bgLightColor: #002140;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.app_container,
+.app_container_layout {
+  height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.app_container_sider {
+  overflow: "auto";
+  height: "100vh";
+  position: "fixed";
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  scrollbar-width: "thin";
+  scrollbar-gutter: "stable";
+}
+
+.app_container_menu {
+  background-color: transparent;
+}
+
+.app_container_menu .ant-menu-item,
+.app_container_menu .ant-menu-item-icon {
+  color: white;
+  font-size: 1rem;
+}
+
+.app_container_menu .ant-menu-item.ant-menu-item-selected {
+  background-color: var(--textColor);
+  color: var(--bgLightColor);
+}
+
+.app_container_menu .ant-menu-item-icon {
+  font-size: 2rem;
+}
