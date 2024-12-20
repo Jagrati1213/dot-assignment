@@ -64,6 +64,10 @@ export default function ProductDetailsModal({
           <Skeleton.Image active={true} style={{ width: 300, height: 160 }} />
           <Skeleton active />
         </div>
+      ) : !data ? (
+        <p className="text-base text-red-600 p-10 text-center">
+          Oops something wrong, please try again!!
+        </p>
       ) : (
         <Card
           title={
